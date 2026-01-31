@@ -1,7 +1,7 @@
 //src/components/IPOSection.tsx
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { ipoApi } from "@/api/ipo";
 import type { Ipo } from "@/types/api/ipo";
@@ -13,36 +13,52 @@ import { mapApiIpoToDisplay } from "@/helper/ipoHelpers";
 export default function IPOSection() {
   const [selectedBoard, setSelectedBoard] = useState("Mainboard");
   const [activeTab, setActiveTab] = useState("current");
+  const [displayedIpos, setDisplayedIpos] = useState<DisplayIpo[]>(currentIPOs);
 
-  // State for API data (used only when board === "All")
-  const [allIpos, setAllIpos] = useState<Ipo[] | null>(null);
-  const [isLoadingAll, setIsLoadingAll] = useState(false);
-  const [allError, setAllError] = useState<string | null>(null);
+  const [ipos, setIpos] = useState<Ipo[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleBoardChange = async (value: string) => {
+  const handleBoardChange = (value: string) => {
     setSelectedBoard(value);
+    setError(null);
+  };
 
-    // Only call API when switching to "All" and if not already loaded
-    if (value === "All" && !allIpos && !isLoadingAll) {
-      try {
-        setIsLoadingAll(true);
-        setAllError(null);
-        const res = await ipoApi.getAllIpos(); // IpoResponse
-        setAllIpos(res.data);
-      } catch (error) {
-        console.error("Failed to fetch IPOs", error);
-        setAllError("Unable to load IPOs at the moment. Please try again.");
-      } finally {
-        setIsLoadingAll(false);
-      }
+  const fetchIpos = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      const res = await ipoApi.getAllIpos();
+
+      setIpos(res.data);
+
+      return res.data;
+    } catch (err) {
+      console.error("Failed to fetch IPOs", err);
+      setError("Unable to load IPOs. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Decide which list to render without changing card UI
-  let displayedIpos: DisplayIpo[] = currentIPOs;
-  if (selectedBoard === "All" && allIpos && !isLoadingAll && !allError) {
-    displayedIpos = allIpos.map(mapApiIpoToDisplay);
-  }
+  useEffect(() => {
+    const shouldFetchFromApi = selectedBoard === "All";
+
+    if (!shouldFetchFromApi) {
+      setDisplayedIpos(currentIPOs);
+      return;
+    } else {
+      const loadIpos = async () => {
+        const data = await fetchIpos();
+        if (data) {
+          const ipoData = data.map(mapApiIpoToDisplay);
+          setDisplayedIpos(ipoData);
+        }
+      };
+      loadIpos();
+    }
+  }, [selectedBoard, activeTab]);
 
   return (
     <section className="py-6 sm:py-8 md:py-10 px-4 bg-[#f2f4ff]">
@@ -259,19 +275,20 @@ export default function IPOSection() {
                   </div>
 
                   <div className="grid gap-2 sm:gap-3 mt-4">
-                    {selectedBoard === "All" && isLoadingAll && (
+                    {selectedBoard === "All" && isLoading && (
                       <div className="border border-gray-200 rounded-lg bg-white p-4 text-sm text-gray-600">
                         Loading IPOs...
                       </div>
                     )}
 
-                    {selectedBoard === "All" && allError && !isLoadingAll && (
+                    {selectedBoard === "All" && error && !isLoading && (
                       <div className="border border-gray-200 rounded-lg bg-white p-4 text-sm text-red-600">
-                        {allError}
+                        {error}
                       </div>
                     )}
 
-                    {!isLoadingAll &&
+                    {!isLoading &&
+                      !error &&
                       displayedIpos.map((ipo, index) => (
                         <IpoCard key={index} ipo={ipo} />
                       ))}
