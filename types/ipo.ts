@@ -1,7 +1,8 @@
 export interface DisplayIpo {
   name: string;
+  logo: string | null;
+  currentStatus?: string;
   boardType: string;
-  isLive: boolean;
   allotmentAwaited: boolean;
   offerDate: string;
   offerPrice: string;

@@ -28,7 +28,7 @@ axiosInstance.interceptors.request.use(
 
 // Response Interceptor
 axiosInstance.interceptors.response.use(
-  (response) => response.data, // Returns unwrapped data
+  (response) => response, // Returns unwrapped data
   (error: AxiosError<ApiError>) => {
     if (!error.response) {
       const apiError: ApiError = {

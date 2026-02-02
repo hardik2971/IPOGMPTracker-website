@@ -14,9 +14,17 @@ export default function IpoCard({ ipo }: IpoCardProps) {
         <div className="flex items-start gap-3 sm:gap-4 md:gap-5">
           {/* Logo Section */}
           <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-white border border-black rounded-lg flex items-center justify-center flex-shrink-0">
-            <span className="text-gray-800 font-bold text-lg sm:text-xl md:text-2xl">
-              {ipo.name.charAt(0)}
-            </span>
+            {ipo.logo ? (
+              <img
+                src={ipo.logo}
+                alt={`${ipo.name} Logo`}
+                className="max-w-full max-h-full object-contain"
+              />
+            ) : (
+              <span className="text-gray-800 font-bold text-lg sm:text-xl md:text-2xl">
+                {ipo.name.charAt(0)}
+              </span>
+            )}
           </div>
 
           {/* Main Content */}
@@ -29,12 +37,17 @@ export default function IpoCard({ ipo }: IpoCardProps) {
               <span className="px-3 py-0.5 bg-green-600 text-white text-xs font-medium rounded">
                 {ipo.boardType}
               </span>
-              {ipo.isLive && (
+              {ipo.currentStatus === "closed" ? (
                 <span className="px-3 py-0.5 bg-red-600 text-white text-xs font-medium rounded flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
+                  Close
+                </span>
+              ) : ipo.currentStatus === "open" ? (
+                <span className="px-3 py-0.5 bg-green-600 text-white text-xs font-medium rounded flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
                   Live
                 </span>
-              )}
+              ) : null}
               {ipo.allotmentAwaited && (
                 <span className="px-3 py-0.5 bg-orange-400 text-white text-xs font-medium rounded flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
@@ -82,7 +95,7 @@ export default function IpoCard({ ipo }: IpoCardProps) {
                 <button className="flex-1 sm:flex-none px-3 sm:px-4 py-1.5 sm:py-2 bg-purple-100 text-purple-700 rounded-lg text-xs sm:text-sm font-medium hover:bg-purple-200 transition-colors whitespace-nowrap">
                   View
                 </button>
-                {ipo.isLive && (
+                {ipo.currentStatus === "open" && (
                   <button className="flex-1 sm:flex-none px-3 sm:px-5 py-1.5 sm:py-2 bg-purple-600 text-white rounded-lg text-xs sm:text-sm font-medium hover:bg-purple-700 transition-colors whitespace-nowrap">
                     Apply
                   </button>

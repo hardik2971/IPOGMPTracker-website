@@ -1,6 +1,4 @@
-import { DisplayIpo } from "@/types/ipo";
-
-export const currentIPOs: DisplayIpo[] = [
+export const currentIPOs: any[] = [
   {
     name: "Bharat Coking Coal",
     boardType: "Mainboard",

@@ -25,9 +25,10 @@ export const stripHtml = (html: string): string =>
 
 export const mapApiIpoToDisplay = (ipo: Ipo): DisplayIpo => ({
   name: ipo.name,
+  logo: ipo.icon_url || null,
   // API doesn’t give board type; keep "Mainboard" to preserve UI
   boardType: "Mainboard",
-  isLive: ipo.current_status === "open",
+  currentStatus: ipo.current_status,
   allotmentAwaited: Boolean(ipo.allotment_link),
   offerDate: formatDateRange(ipo.open, ipo.close),
   offerPrice:
@@ -37,7 +38,7 @@ export const mapApiIpoToDisplay = (ipo: Ipo): DisplayIpo => ({
         : `${ipo.min_price}-${ipo.max_price}`
       : "-",
   lotSize: ipo.lot_size ? String(ipo.lot_size) : "-",
-  // API doesn’t give subscription; keep UI, use placeholder
+  // API doesn’t give subscription data; keep UI, use placeholder
   subscription: "-",
   expPremium: stripHtml(ipo.premium) || "-",
 });

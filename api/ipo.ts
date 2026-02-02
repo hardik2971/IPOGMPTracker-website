@@ -10,6 +10,7 @@ export const ipoApi = {
     const response = await apiClient.get<ApiResponse<IpoResponse>>(
       ENDPOINTS.IPO.GET_ALL
     );
-    return response.data;
+    const { count, data } = response.data;
+    return { count, data };
   },
 };
