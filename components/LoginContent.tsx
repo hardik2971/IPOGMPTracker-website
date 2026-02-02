@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { DialogClose } from '@/components/ui/dialog';
-import { X } from 'lucide-react';
-import { signInWithPopup } from 'firebase/auth';
-import { auth, googleProvider } from '@/lib/firebase';
+import { useState } from "react";
+import { DialogClose } from "@/components/ui/dialog";
+import { X } from "lucide-react";
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "@/lib/firebase";
 
 export default function LoginContent() {
   const [loading, setLoading] = useState(false);
@@ -16,12 +16,12 @@ export default function LoginContent() {
       setError(null);
       const result = await signInWithPopup(auth, googleProvider);
       // User signed in successfully
-      console.log('User signed in:', result.user);
+      console.log("User signed in:", result.user);
       // You can add redirect logic here or close the dialog
       // For example, you might want to close the dialog after successful login
     } catch (err: any) {
-      console.error('Error signing in with Google:', err);
-      setError(err.message || 'Failed to sign in with Google');
+      console.error("Error signing in with Google:", err);
+      setError(err.message || "Failed to sign in with Google");
     } finally {
       setLoading(false);
     }
@@ -40,8 +40,8 @@ export default function LoginContent() {
             Step into IPO Spotlight
           </h2>
           <p className="text-lg md:text-xl text-white/90 leading-relaxed">
-            Apply for top IPOs, access essential IPO info &amp; check your allotment status in
-            realtime!
+            Apply for top IPOs, access essential IPO info &amp; check your
+            allotment status in realtime!
           </p>
         </div>
       </div>
@@ -54,10 +54,11 @@ export default function LoginContent() {
           <span className="sr-only">Close</span>
         </DialogClose>
         <h3 className="text-3xl font-bold text-[#1e3a8a] mb-3">
-          Welcome to IPO-G
+          Welcome to IPOGMPTracker
         </h3>
         <p className="text-[#1e3a8a] mb-6 text-base">
-          Sign up or log in to manage accounts, submit bids, and access premium features.
+          Sign up or log in to manage accounts, submit bids, and access premium
+          features.
         </p>
 
         {/* Continue with Google Button */}
@@ -89,7 +90,7 @@ export default function LoginContent() {
             </svg>
           )}
           <span className="text-gray-700 font-medium">
-            {loading ? 'Signing in...' : 'Continue with Google'}
+            {loading ? "Signing in..." : "Continue with Google"}
           </span>
         </button>
 
@@ -102,12 +103,18 @@ export default function LoginContent() {
 
         {/* Terms & Privacy Policy */}
         <p className="text-sm text-gray-600 text-center">
-          By proceeding, I agree to{' '}
-          <a href="/terms" className="text-blue-600 underline hover:text-blue-800">
+          By proceeding, I agree to{" "}
+          <a
+            href="/terms"
+            className="text-blue-600 underline hover:text-blue-800"
+          >
             T&amp;C
-          </a>{' '}
-          &amp;{' '}
-          <a href="/privacy" className="text-blue-600 underline hover:text-blue-800">
+          </a>{" "}
+          &amp;{" "}
+          <a
+            href="/privacy"
+            className="text-blue-600 underline hover:text-blue-800"
+          >
             Privacy Policy
           </a>
         </p>
@@ -115,4 +122,3 @@ export default function LoginContent() {
     </div>
   );
 }
-

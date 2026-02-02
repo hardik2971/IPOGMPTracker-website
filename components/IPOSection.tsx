@@ -305,7 +305,7 @@ export default function IPOSection() {
                   <div className="flex flex-wrap gap-2 mb-6">
                     {[
                       "Investment courses",
-                      "IPO-G",
+                      "IPOGMPTracker",
                       "Live IPO subscription",
                       "IPO research reports",
                       "IPO event calendar",
@@ -377,7 +377,7 @@ export default function IPOSection() {
               </div>
 
               <div className="hidden lg:block bg-white rounded-lg overflow-hidden shadow-lg p-3 flex flex-col justify-start gap-3">
-                <div className="text-lg lg:text-xl font-medium text-[#1e3a8a]">
+                <div className="text-lg lg:text-xl font-medium text-[#1e3a8a] pb-3">
                   Angel One
                 </div>
                 <div className="w-full">
@@ -387,13 +387,13 @@ export default function IPOSection() {
                     className="w-full h-auto object-cover"
                   />
                 </div>
-                <button className="bg-[#9333ea] hover:bg-[#7e22ce] text-white font-semibold py-2 rounded-lg transition-colors text-sm">
+                <button className="bg-[#9333ea] hover:bg-[#7e22ce] text-white font-semibold py-2 mt-3 w-full rounded-lg transition-colors">
                   Know More
                 </button>
               </div>
 
               <div className="hidden lg:block bg-white rounded-lg overflow-hidden shadow-lg p-3 flex flex-col justify-start gap-3">
-                <div className="text-lg lg:text-xl font-medium text-[#1e3a8a]">
+                <div className="text-lg lg:text-xl font-medium text-[#1e3a8a] pb-3">
                   Zerodha
                 </div>
                 <div className="w-full">
@@ -403,13 +403,13 @@ export default function IPOSection() {
                     className="w-full h-auto object-cover"
                   />
                 </div>
-                <button className="bg-[#9333ea] hover:bg-[#7e22ce] text-white font-semibold py-2 rounded-lg transition-colors text-sm">
+                <button className="bg-[#9333ea] hover:bg-[#7e22ce] text-white font-semibold py-2 mt-3 w-full rounded-lg transition-colors text-sm">
                   Know More
                 </button>
               </div>
 
               <div className="hidden lg:block bg-white rounded-lg overflow-hidden shadow-lg p-3 flex flex-col justify-start gap-3">
-                <div className="text-lg lg:text-xl font-medium text-[#1e3a8a]">
+                <div className="text-lg lg:text-xl font-medium text-[#1e3a8a] pb-3">
                   Upstox
                 </div>
                 <div className="w-full">
@@ -419,7 +419,7 @@ export default function IPOSection() {
                     className="w-full h-auto object-cover"
                   />
                 </div>
-                <button className="bg-[#9333ea] hover:bg-[#7e22ce] text-white font-semibold py-2 rounded-lg transition-colors text-sm">
+                <button className="bg-[#9333ea] hover:bg-[#7e22ce] text-white font-semibold py-2 mt-3 w-full rounded-lg transition-colors text-sm">
                   Know More
                 </button>
               </div>

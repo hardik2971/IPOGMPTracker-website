@@ -52,21 +52,28 @@ export default function TopBrokers() {
       <div className="container mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5">
           <div className="lg:col-span-9">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 sm:mb-8 text-center">Top Brokers</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 sm:mb-8 text-center">
+              Top Brokers
+            </h2>
             <div className="grid gap-4 sm:gap-6">
               {brokers.map((broker, index) => (
-                <div key={index} className="bg-white rounded-lg p-4 sm:p-5 md:p-6 hover:shadow-lg transition-shadow">
+                <div
+                  key={index}
+                  className="bg-white rounded-lg p-4 sm:p-5 md:p-6 hover:shadow-lg transition-shadow"
+                >
                   <div className="flex flex-col lg:flex-row lg:items-start gap-4 sm:gap-3">
                     {/* Left Section: Logo and Broker Name */}
                     <div className="flex flex-row sm:flex-col items-center sm:items-center gap-3 sm:gap-0 min-w-[100px] mx-auto lg:mx-0">
-                    <div className="w-[50px] h-[50px] sm:w-[60px] sm:h-[60px] rounded-lg flex items-center justify-center mb-0 sm:mb-3 overflow-hidden bg-white flex-shrink-0">
-                        <img 
-                          src={broker.logo} 
+                      <div className="w-[50px] h-[50px] sm:w-[60px] sm:h-[60px] rounded-lg flex items-center justify-center mb-0 sm:mb-3 overflow-hidden bg-white flex-shrink-0">
+                        <img
+                          src={broker.logo}
                           alt={broker.name}
                           className="w-full h-full object-contain"
                         />
                       </div>
-                      <h3 className="text-base sm:text-lg font-semibold text-gray-800 text-center sm:text-center">{broker.name}</h3>
+                      <h3 className="text-base sm:text-lg font-semibold text-gray-800 text-center sm:text-center">
+                        {broker.name}
+                      </h3>
                     </div>
 
                     {/* Middle Section: Features and Financial Details */}
@@ -79,8 +86,16 @@ export default function TopBrokers() {
                               key={tagIndex}
                               className="inline-flex items-center gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 bg-stone-50 text-orange-700 text-xs sm:text-sm font-medium rounded"
                             >
-                              <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              <svg
+                                className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-orange-600"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                  clipRule="evenodd"
+                                />
                               </svg>
                               {tag}
                             </span>
@@ -100,22 +115,38 @@ export default function TopBrokers() {
                       {/* Financial Details */}
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
                         <div>
-                          <p className="text-xs sm:text-sm text-gray-500 mb-1">Account Opening</p>
-                          <p className="text-sm sm:text-base font-semibold text-gray-800">{broker.accountOpening}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs sm:text-sm text-gray-500 mb-1">Account Maintenance</p>
-                          <p className="text-sm sm:text-base font-semibold text-gray-800">{broker.amc}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs sm:text-sm text-gray-500 mb-1">Equity Delivery</p>
+                          <p className="text-xs sm:text-sm text-gray-500 mb-1">
+                            Account Opening
+                          </p>
                           <p className="text-sm sm:text-base font-semibold text-gray-800">
-                            {broker.equityDelivery === "0%" ? "Zero" : broker.equityDelivery}
+                            {broker.accountOpening}
                           </p>
                         </div>
                         <div>
-                          <p className="text-xs sm:text-sm text-gray-500 mb-1">Equity Intraday</p>
-                          <p className="text-sm sm:text-base font-semibold text-gray-800">{broker.equityIntraday}</p>
+                          <p className="text-xs sm:text-sm text-gray-500 mb-1">
+                            Account Maintenance
+                          </p>
+                          <p className="text-sm sm:text-base font-semibold text-gray-800">
+                            {broker.amc}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-xs sm:text-sm text-gray-500 mb-1">
+                            Equity Delivery
+                          </p>
+                          <p className="text-sm sm:text-base font-semibold text-gray-800">
+                            {broker.equityDelivery === "0%"
+                              ? "Zero"
+                              : broker.equityDelivery}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-xs sm:text-sm text-gray-500 mb-1">
+                            Equity Intraday
+                          </p>
+                          <p className="text-sm sm:text-base font-semibold text-gray-800">
+                            {broker.equityIntraday}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -136,21 +167,29 @@ export default function TopBrokers() {
               <div className="flex flex-wrap gap-2 mb-6">
                 {[
                   "Investment courses",
-                  "IPO-G",
+                  "IPOGMPTracker",
                   "Live IPO subscription",
                   "IPO research reports",
                   "IPO event calendar",
                   "Personal finance apps",
                   "IPO application service",
                   "Investment strategy guides",
-                  "Wealth management advisors"
+                  "Wealth management advisors",
                 ].map((tag, index) => (
                   <button
                     key={index}
                     className="flex items-center gap-1.5 px-3 py-1.5 bg-white text-blue-600 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
                   >
-                    <svg className="w-4 h-4 text-purple-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
+                    <svg
+                      className="w-4 h-4 text-purple-500 flex-shrink-0"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                     <span>{tag}</span>
                   </button>
@@ -165,8 +204,7 @@ export default function TopBrokers() {
               </div>
             </div>
           </div>
-          <div className="lg:col-span-3 hidden lg:block">
-          </div>
+          <div className="lg:col-span-3 hidden lg:block"></div>
         </div>
       </div>
     </section>
