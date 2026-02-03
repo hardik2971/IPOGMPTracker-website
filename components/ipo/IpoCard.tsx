@@ -2,6 +2,7 @@
 "use client";
 
 import { DisplayIpo } from "@/types/ipo";
+import Image from "next/image";
 
 interface IpoCardProps {
   ipo: DisplayIpo;
@@ -13,7 +14,7 @@ export default function IpoCard({ ipo }: IpoCardProps) {
       <div className="bg-white rounded-lg p-3 sm:p-4 md:p-5">
         <div className="flex items-start gap-3 sm:gap-4 md:gap-5">
           {/* Logo Section */}
-          <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-white border border-black rounded-lg flex items-center justify-center flex-shrink-0">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-white flex items-center justify-center flex-shrink-0">
             {ipo.logo ? (
               <img
                 src={ipo.logo}

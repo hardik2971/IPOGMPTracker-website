@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { ipoApi } from "@/api/ipo";
 import type { Ipo } from "@/types/api/ipo";
@@ -30,7 +31,6 @@ export default function IPOSection() {
       setError(null);
 
       const res = await ipoApi.getAllIpos();
-console.log("res.data",res.data);
 
       setIpos(res.data);
 
@@ -44,22 +44,28 @@ console.log("res.data",res.data);
   };
 
   useEffect(() => {
-    const shouldFetchFromApi = selectedBoard === "All";
+    const loadIpos = async () => {
+      // Reuse already-fetched IPOs when available to avoid unnecessary API calls
+      const data = ipos.length ? ipos : await fetchIpos();
 
-    if (!shouldFetchFromApi) {
-      setDisplayedIpos(currentIPOs);
-      return;
-    } else {
-      const loadIpos = async () => {
-        const data = await fetchIpos();
-        if (data) {
-          const ipoData = data.map(mapApiIpoToDisplay);
-          setDisplayedIpos(ipoData);
-        }
-      };
-      loadIpos();
-    }
-  }, [selectedBoard, activeTab]);
+      if (!data) return;
+
+      // Filter by board based on `ipo_type` coming from the API
+      let filtered = data;
+
+      if (selectedBoard === "SME") {
+        filtered = data.filter((ipo) => ipo.ipo_type === "SME");
+      } else if (selectedBoard === "Mainboard") {
+        filtered = data.filter((ipo) => ipo.ipo_type !== "SME");
+      }
+      // For "All" we keep all IPOs
+
+      const ipoData = filtered.map(mapApiIpoToDisplay);
+      setDisplayedIpos(ipoData);
+    };
+
+    loadIpos();
+  }, [selectedBoard, activeTab, ipos.length]);
 
   return (
     <section className="py-6 sm:py-8 md:py-10 px-4 bg-[#f2f4ff]">
@@ -252,37 +258,39 @@ console.log("res.data",res.data);
                           </span>
                           <span className="sm:hidden">Live Sub</span>
                         </button>
-                        <button className="flex items-center justify-center gap-2 bg-[#5A32A3] hover:bg-[#4C2A8A] text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg font-semibold text-xs sm:text-sm transition-colors whitespace-nowrap">
-                          <svg
-                            className="w-4 h-4 sm:w-5 sm:h-5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2.5}
-                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                            />
-                          </svg>
-                          <span className="hidden sm:inline">
-                            IPO Event Calendar
-                          </span>
-                          <span className="sm:hidden">Calendar</span>
-                        </button>
+                        <Link href="/ipo-event-calendar">
+                          <button className="flex items-center justify-center gap-2 bg-[#5A32A3] hover:bg-[#4C2A8A] text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg font-semibold text-xs sm:text-sm transition-colors whitespace-nowrap">
+                            <svg
+                              className="w-4 h-4 sm:w-5 sm:h-5"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2.5}
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                              />
+                            </svg>
+                            <span className="hidden sm:inline">
+                              IPO Event Calendar
+                            </span>
+                            <span className="sm:hidden">Calendar</span>
+                          </button>
+                        </Link>
                       </div>
                     </div>
                   </div>
 
                   <div className="grid gap-2 sm:gap-3 mt-4">
-                    {selectedBoard === "All" && isLoading && (
+                    {isLoading && (
                       <div className="border border-gray-200 rounded-lg bg-white p-4 text-sm text-gray-600">
                         Loading IPOs...
                       </div>
                     )}
 
-                    {selectedBoard === "All" && error && !isLoading && (
+                    {error && !isLoading && (
                       <div className="border border-gray-200 rounded-lg bg-white p-4 text-sm text-red-600">
                         {error}
                       </div>
@@ -355,7 +363,7 @@ console.log("res.data",res.data);
                   Download App
                 </h3>
                 <p className="text-xs text-gray-500 text-center mb-4">
-                  India's most downloaded IPO App with 25,00,000+ Downloads
+                  Indias most downloaded IPO App with 25,00,000+ Downloads
                 </p>
                 <div className="flex gap-2">
                   {/* Google Play Button */}

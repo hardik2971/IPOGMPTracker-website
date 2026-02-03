@@ -64,6 +64,9 @@ export default function Header() {
                   <Link href="/ipo/listed-ipo">Listed IPO</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
+                  <Link href="/ipo-event-calendar">IPO Event Calendar</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link href="/sme-ipo/current-ipo">Current SME IPO</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>

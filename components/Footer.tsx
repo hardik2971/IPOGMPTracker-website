@@ -170,7 +170,7 @@ export default function Footer() {
                 <ul className="list-disc">
                   <li>
                     <Link
-                      href="/calendar"
+                      href="/ipo-event-calendar"
                       className="text-[#333366] hover:underline"
                     >
                       Event Calendar
