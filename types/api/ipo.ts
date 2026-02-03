@@ -8,6 +8,7 @@ export interface IpoResponse {
 export interface Ipo {
   id: number;
   name: string;
+  ipo_type: string;
   open: string; // ISO / date string
   close: string; // ISO / date string
   start_time: string; // HH:mm:ss

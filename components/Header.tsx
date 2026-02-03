@@ -123,12 +123,12 @@ export default function Header() {
             >
               Blog
             </Link>
-            <Link
+            {/* <Link
               href="/support"
               className="text-gray-700 hover:text-purple-600 transition-colors font-medium text-sm xl:text-base"
             >
               Support
-            </Link>
+            </Link> */}
             {/* Login/Register Button */}
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
@@ -259,12 +259,12 @@ export default function Header() {
             >
               Blog
             </Link>
-            <Link
+            {/* <Link
               href="/support"
               className="block text-gray-700 hover:text-purple-600 py-2 text-sm font-medium"
             >
               Support
-            </Link>
+            </Link> */}
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <button className="w-full bg-purple-600 text-white px-4 py-2 rounded-lg text-center text-sm font-semibold hover:bg-purple-700 transition-colors">

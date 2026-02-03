@@ -16,7 +16,7 @@ export const formatDateRange = (open: string, close: string): string => {
 
   return `${openDate.toLocaleDateString(
     "en-US",
-    options
+    options,
   )} - ${closeDate.toLocaleDateString("en-US", options)}`;
 };
 
@@ -27,7 +27,7 @@ export const mapApiIpoToDisplay = (ipo: Ipo): DisplayIpo => ({
   name: ipo.name,
   logo: ipo.icon_url || null,
   // API doesn’t give board type; keep "Mainboard" to preserve UI
-  boardType: "Mainboard",
+  ipoType: ipo.ipo_type,
   currentStatus: ipo.current_status,
   allotmentAwaited: Boolean(ipo.allotment_link),
   offerDate: formatDateRange(ipo.open, ipo.close),

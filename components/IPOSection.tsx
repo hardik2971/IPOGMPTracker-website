@@ -30,6 +30,7 @@ export default function IPOSection() {
       setError(null);
 
       const res = await ipoApi.getAllIpos();
+console.log("res.data",res.data);
 
       setIpos(res.data);
 

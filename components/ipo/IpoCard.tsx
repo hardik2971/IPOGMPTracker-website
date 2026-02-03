@@ -35,7 +35,7 @@ export default function IpoCard({ ipo }: IpoCardProps) {
                 {ipo.name}
               </h3>
               <span className="px-3 py-0.5 bg-green-600 text-white text-xs font-medium rounded">
-                {ipo.boardType}
+                {ipo.ipoType}
               </span>
               {ipo.currentStatus === "closed" ? (
                 <span className="px-3 py-0.5 bg-red-600 text-white text-xs font-medium rounded flex items-center gap-1.5">
