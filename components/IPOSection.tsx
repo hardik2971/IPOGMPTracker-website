@@ -1,28 +1,58 @@
-//src/components/IPOSection.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { ipoApi } from "@/api/ipo";
-import type { Ipo } from "@/types/api/ipo";
+import type { Ipo, Pagination as PaginationInterface } from "@/types/api/ipo";
 import { DisplayIpo } from "@/types/ipo";
-import { currentIPOs } from "@/constant/mockIpo";
 import IpoCard from "./ipo/IpoCard";
 import { mapApiIpoToDisplay } from "@/helper/ipoHelpers";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "./ui/pagination";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 export default function IPOSection() {
   const [selectedBoard, setSelectedBoard] = useState("Mainboard");
   const [activeTab, setActiveTab] = useState("current");
-  const [displayedIpos, setDisplayedIpos] = useState<DisplayIpo[]>(currentIPOs);
+  const [displayedIpos, setDisplayedIpos] = useState<DisplayIpo[]>([]);
+  const [limit, setLimit] = useState<number>(20);
+  const [page, setPage] = useState<number>(1);
 
   const [ipos, setIpos] = useState<Ipo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [pagination, setPagination] = useState<PaginationInterface | null>(
+    null
+  );
 
   const handleBoardChange = (value: string) => {
     setSelectedBoard(value);
     setError(null);
+  };
+
+  const handleLimitChange = (value: string) => {
+    setLimit(Number(value));
+    setPage(1); // Reset to first page when limit changes
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+    // Scroll to top of IPO section
+    window.scrollTo({ top: 400, behavior: "smooth" });
   };
 
   const fetchIpos = async () => {
@@ -30,9 +60,12 @@ export default function IPOSection() {
       setIsLoading(true);
       setError(null);
 
-      const res = await ipoApi.getAllIpos();
+      const res = await ipoApi.getAllIpos({ page, limit });
 
       setIpos(res.data);
+      if (res.pagination) {
+        setPagination(res.pagination);
+      }
 
       return res.data;
     } catch (err) {
@@ -43,29 +76,61 @@ export default function IPOSection() {
     }
   };
 
+  // Fetch IPOs when page or limit changes
   useEffect(() => {
-    const loadIpos = async () => {
-      // Reuse already-fetched IPOs when available to avoid unnecessary API calls
-      const data = ipos.length ? ipos : await fetchIpos();
+    fetchIpos();
+  }, [page, limit]);
 
-      if (!data) return;
+  // Filter IPOs by board type
+  useEffect(() => {
+    if (!ipos.length) return;
 
-      // Filter by board based on `ipo_type` coming from the API
-      let filtered = data;
+    let filtered = ipos;
 
-      if (selectedBoard === "SME") {
-        filtered = data.filter((ipo) => ipo.ipo_type === "SME");
-      } else if (selectedBoard === "Mainboard") {
-        filtered = data.filter((ipo) => ipo.ipo_type !== "SME");
+    if (selectedBoard === "SME") {
+      filtered = ipos.filter((ipo) => ipo.ipo_type === "SME");
+    } else if (selectedBoard === "Mainboard") {
+      filtered = ipos.filter((ipo) => ipo.ipo_type !== "SME");
+    }
+
+    const ipoData = filtered.map(mapApiIpoToDisplay);
+    setDisplayedIpos(ipoData);
+  }, [selectedBoard, ipos]);
+
+  // Generate page numbers to display
+  const getPageNumbers = (): (number | "ellipsis")[] => {
+    if (!pagination) return [];
+
+    const { totalPages, page: currentPage } = pagination;
+    const pages: (number | "ellipsis")[] = [];
+
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
       }
-      // For "All" we keep all IPOs
+    } else {
+      pages.push(1);
 
-      const ipoData = filtered.map(mapApiIpoToDisplay);
-      setDisplayedIpos(ipoData);
-    };
+      if (currentPage > 3) {
+        pages.push("ellipsis");
+      }
 
-    loadIpos();
-  }, [selectedBoard, activeTab, ipos.length]);
+      const start = Math.max(2, currentPage - 1);
+      const end = Math.min(totalPages - 1, currentPage + 1);
+
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
+
+      if (currentPage < totalPages - 2) {
+        pages.push("ellipsis");
+      }
+
+      pages.push(totalPages);
+    }
+
+    return pages;
+  };
 
   return (
     <section className="py-6 sm:py-8 md:py-10 px-4 bg-[#f2f4ff]">
@@ -283,7 +348,47 @@ export default function IPOSection() {
                     </div>
                   </div>
 
-                  <div className="grid gap-2 sm:gap-3 mt-4">
+                  {/* Results info and limit selector */}
+                  {pagination && (
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mt-4 mb-2">
+                      <p className="text-sm text-gray-600">
+                        Showing{" "}
+                        <span className="font-medium">
+                          {(pagination.page - 1) * pagination.limit + 1}
+                        </span>{" "}
+                        to{" "}
+                        <span className="font-medium">
+                          {Math.min(
+                            pagination.page * pagination.limit,
+                            pagination.total
+                          )}
+                        </span>{" "}
+                        of{" "}
+                        <span className="font-medium">{pagination.total}</span>{" "}
+                        IPOs
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-gray-600">Show:</span>
+                        <Select
+                          value={limit.toString()}
+                          onValueChange={handleLimitChange}
+                        >
+                          <SelectTrigger className="w-20 h-8 bg-white">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent className="bg-white">
+                            <SelectItem value="10">10</SelectItem>
+                            <SelectItem value="20">20</SelectItem>
+                            <SelectItem value="50">50</SelectItem>
+                            <SelectItem value="100">100</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <span className="text-sm text-gray-600">per page</span>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="grid gap-2 sm:gap-3 mt-2">
                     {isLoading && (
                       <div className="border border-gray-200 rounded-lg bg-white p-4 text-sm text-gray-600">
                         Loading IPOs...
@@ -301,8 +406,84 @@ export default function IPOSection() {
                       displayedIpos.map((ipo, index) => (
                         <IpoCard key={index} ipo={ipo} />
                       ))}
+
+                    {!isLoading && !error && displayedIpos.length === 0 && (
+                      <div className="border border-gray-200 rounded-lg bg-white p-4 text-sm text-gray-600">
+                        No IPOs found for the selected filter.
+                      </div>
+                    )}
                   </div>
+
+                  {/* Pagination */}
+                  {!isLoading &&
+                    !error &&
+                    pagination &&
+                    pagination.totalPages > 1 && (
+                      <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <Pagination>
+                          <PaginationContent>
+                            {/* Previous Button */}
+                            <PaginationItem>
+                              <PaginationPrevious
+                                href="#"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  if (pagination.hasPrevPage) {
+                                    handlePageChange(page - 1);
+                                  }
+                                }}
+                                className={
+                                  !pagination.hasPrevPage
+                                    ? "pointer-events-none opacity-50"
+                                    : "cursor-pointer"
+                                }
+                              />
+                            </PaginationItem>
+
+                            {/* Page Numbers */}
+                            {getPageNumbers().map((pageNum, index) => (
+                              <PaginationItem key={index}>
+                                {pageNum === "ellipsis" ? (
+                                  <PaginationEllipsis />
+                                ) : (
+                                  <PaginationLink
+                                    href="#"
+                                    isActive={pageNum === page}
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      handlePageChange(pageNum);
+                                    }}
+                                    className="cursor-pointer"
+                                  >
+                                    {pageNum}
+                                  </PaginationLink>
+                                )}
+                              </PaginationItem>
+                            ))}
+
+                            {/* Next Button */}
+                            <PaginationItem>
+                              <PaginationNext
+                                href="#"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  if (pagination.hasNextPage) {
+                                    handlePageChange(page + 1);
+                                  }
+                                }}
+                                className={
+                                  !pagination.hasNextPage
+                                    ? "pointer-events-none opacity-50"
+                                    : "cursor-pointer"
+                                }
+                              />
+                            </PaginationItem>
+                          </PaginationContent>
+                        </Pagination>
+                      </div>
+                    )}
                 </div>
+
                 {/* Discover More Section */}
                 <div className="mt-2">
                   {/* Discover more label */}

@@ -1,8 +1,23 @@
 // src/types/api/ipo.ts
 
+export interface Pagination {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+}
+
 export interface IpoResponse {
   count: number;
   data: Ipo[];
+  pagination: Pagination;
+}
+
+export interface IpoParams {
+  limit?: number;
+  page?: number;
 }
 
 export interface Ipo {

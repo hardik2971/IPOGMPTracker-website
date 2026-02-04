@@ -11,7 +11,8 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: "IPO.in - Broker Details & Comparison",
-  description: "Your comprehensive platform for IPO information, broker comparison, and investment services",
+  description:
+    "Your comprehensive platform for IPO information, broker comparison, and investment services",
 };
 
 export default function RootLayout({
