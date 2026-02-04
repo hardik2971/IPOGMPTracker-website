@@ -5,80 +5,142 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Home, ChevronRight } from "lucide-react";
+import { ipoApi } from "@/api/ipo";
+import type { Ipo, Pagination as PaginationInterface } from "@/types/api/ipo";
+import { DisplayIpo } from "@/types/ipo";
+import IpoCard from "@/components/ipo/IpoCard";
+import { mapApiIpoToDisplay } from "@/helper/ipoHelpers";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function SMECurrentIPO() {
   const pathname = usePathname();
   const router = useRouter();
 
-  const isCurrent = pathname === "/sme-ipo/current-ipo";
-  const isUpcoming = pathname === "/sme-ipo/upcoming-ipo";
-  const isListed = pathname === "/sme-ipo/listed-ipo";
+  const isCurrent = pathname === "/ipo/current-ipo";
+  const isUpcoming = pathname === "/ipo/upcoming-ipo";
+  const isListed = pathname === "/ipo/listed-ipo";
 
-  const [selectedBoard, setSelectedBoard] = useState("SME");
-  const currentIPOs = [
-    {
-      name: "Bharat Coking Coal",
-      boardType: "SME",
-      isLive: true,
-      offerDate: "Jan 9, 2026 - Jan 13, 2026",
-      offerPrice: "21-23",
-      lotSize: "600",
-      subscription: "8.14 times",
-      expPremium: "10-10.1 (43.48%)",
-    },
-    {
-      name: "Amagi Media Labs",
-      boardType: "SME",
-      isLive: true,
-      offerDate: "Jan 20, 2026 - Jan 24, 2026",
-      offerPrice: "200-210",
-      lotSize: "50",
-      subscription: "5.2 times",
-      expPremium: "15-16 (35.5%)",
-    },
-    {
-      name: "Pranav Constructions",
-      boardType: "SME",
-      isLive: false,
-      offerDate: "Jan 25, 2026 - Jan 29, 2026",
-      offerPrice: "100-105",
-      lotSize: "150",
-      subscription: "0 times",
-      expPremium: "8-9 (20%)",
-    },
-    {
-      name: "Cordeila Cruises (Waterways Leisure Tourism)",
-      boardType: "SME",
-      isLive: false,
-      offerDate: "Jan 30, 2026 - Feb 3, 2026",
-      offerPrice: "175-180",
-      lotSize: "80",
-      subscription: "0 times",
-      expPremium: "12-13 (28%)",
-    },
-    {
-      name: "Clean Max Enviro Energy Solutions",
-      boardType: "SME",
-      isLive: false,
-      offerDate: "Feb 5, 2026 - Feb 9, 2026",
-      offerPrice: "125-130",
-      lotSize: "120",
-      subscription: "0 times",
-      expPremium: "10-11 (25%)",
-    },
-    {
-      name: "Fractal Analytics",
-      boardType: "SME",
-      isLive: false,
-      offerDate: "Feb 10, 2026 - Feb 14, 2026",
-      offerPrice: "300-310",
-      lotSize: "40",
-      subscription: "0 times",
-      expPremium: "18-20 (40%)",
-    },
-  ];
+  const [selectedBoard, setSelectedBoard] = useState("Mainboard");
+    const [activeTab, setActiveTab] = useState("current");
+    const [displayedIpos, setDisplayedIpos] = useState<DisplayIpo[]>([]);
+    const [limit, setLimit] = useState<number>(20);
+    const [page, setPage] = useState<number>(1);
+    const [ipos, setIpos] = useState<Ipo[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [pagination, setPagination] = useState<PaginationInterface | null>(
+      null
+    );
+  
+    const handleBoardChange = (value: string) => {
+      setSelectedBoard(value);
+      setError(null);
+    };
+  
+    const handleLimitChange = (value: string) => {
+      setLimit(Number(value));
+      setPage(1); // Reset to first page when limit changes
+    };
+  
+    const handlePageChange = (newPage: number) => {
+      setPage(newPage);
+      // Scroll to top of IPO section
+      window.scrollTo({ top: 400, behavior: "smooth" });
+    };
+  
+    const fetchIpos = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+  
+        const res = await ipoApi.getAllIpos({ page, limit });
+  
+        setIpos(res.data);
+        if (res.pagination) {
+          setPagination(res.pagination);
+        }
+  
+        return res.data;
+      } catch (err) {
+        console.error("Failed to fetch IPOs", err);
+        setError("Unable to load IPOs. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    // Fetch IPOs when page or limit changes
+    useEffect(() => {
+      fetchIpos();
+    }, [page, limit]);
+  
+    // Filter IPOs by board type
+    useEffect(() => {
+      if (!ipos.length) return;
+  
+      let filtered = ipos;
+  
+      if (selectedBoard === "SME") {
+        filtered = ipos.filter((ipo) => ipo.ipo_type === "SME");
+      } else if (selectedBoard === "Mainboard") {
+        filtered = ipos.filter((ipo) => ipo.ipo_type !== "SME");
+      }
+  
+      const ipoData = filtered.map(mapApiIpoToDisplay);
+      setDisplayedIpos(ipoData);
+    }, [selectedBoard, ipos]);
+  
+    // Generate page numbers to display
+    const getPageNumbers = (): (number | "ellipsis")[] => {
+      if (!pagination) return [];
+  
+      const { totalPages, page: currentPage } = pagination;
+      const pages: (number | "ellipsis")[] = [];
+  
+      if (totalPages <= 7) {
+        for (let i = 1; i <= totalPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        pages.push(1);
+  
+        if (currentPage > 3) {
+          pages.push("ellipsis");
+        }
+  
+        const start = Math.max(2, currentPage - 1);
+        const end = Math.min(totalPages - 1, currentPage + 1);
+  
+        for (let i = start; i <= end; i++) {
+          pages.push(i);
+        }
+  
+        if (currentPage < totalPages - 2) {
+          pages.push("ellipsis");
+        }
+  
+        pages.push(totalPages);
+      }
+  
+      return pages;
+    };
   return (
     <div className="min-h-screen bg-white">
       <Header />
@@ -184,114 +246,138 @@ export default function SMECurrentIPO() {
                         </RadioGroup>
                       </div>
                     </div>
-                    <div className="grid gap-2 mt-2">
-                      {currentIPOs.map((ipo, index) => (
-                        <div
-                          key={index}
-                          className="border border-gray-200 rounded-lg"
-                        >
-                          <div className="bg-white rounded-lg p-5">
-                            <div className="flex items-start gap-5">
-                              {/* Logo Section */}
-                              <div className="w-24 h-24 bg-white border border-black rounded-lg flex items-center justify-center flex-shrink-0">
-                                <span className="text-gray-800 font-bold text-2xl">
-                                  {ipo.name.charAt(0)}
-                                </span>
-                              </div>
+                    <div className="grid gap-2 sm:gap-3 mt-2">
+                      {isLoading && (
+                        <div className="border border-gray-200 rounded-lg bg-white p-4 text-sm text-gray-600">
+                          Loading IPOs...
+                        </div>
+                      )}
 
-                              {/* Main Content */}
-                              <div className="flex-1 min-w-0">
-                                {/* Company Name and Badges */}
-                                <div className="flex items-center gap-3 mb-1.5 flex-wrap">
-                                  <h3 className="text-2xl font-bold text-gray-800">
-                                    {ipo.name}
-                                  </h3>
-                                  <span className="px-3 py-0.5 bg-green-600 text-white text-xs font-medium rounded">
-                                    {ipo.boardType}
-                                  </span>
-                                  {ipo.isLive && (
-                                    <span className="px-3 py-0.5 bg-red-600 text-white text-xs font-medium rounded flex items-center gap-1.5">
-                                      <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
-                                      Live
-                                    </span>
-                                  )}
-                                </div>
+                      {error && !isLoading && (
+                        <div className="border border-gray-200 rounded-lg bg-white p-4 text-sm text-red-600">
+                          {error}
+                        </div>
+                      )}
 
-                                {/* Offer Date */}
-                                <p className="text-sm text-gray-500 mb-5">
-                                  Offer Date: {ipo.offerDate}
-                                </p>
+                      {!isLoading &&
+                        !error &&
+                        displayedIpos.map((ipo, index) => (
+                          <IpoCard key={index} ipo={ipo} />
+                        ))}
 
-                                {/* Offer Details Grid with Buttons */}
-                                <div className="flex items-start gap-6">
-                                  <div className="flex  gap-8 flex-1">
-                                    <div>
-                                      <p className="text-xs text-gray-500 mb-1">
-                                        Offer Price
-                                      </p>
-                                      <p className="text-sm font-normal text-gray-800">
-                                        {ipo.offerPrice}
-                                      </p>
-                                    </div>
-                                    <div>
-                                      <p className="text-xs text-gray-500 mb-1">
-                                        Lot Size
-                                      </p>
-                                      <p className="text-sm font-normal text-gray-800">
-                                        {ipo.lotSize}
-                                      </p>
-                                    </div>
-                                    <div>
-                                      <p className="text-xs text-gray-500 mb-1">
-                                        Subscription
-                                      </p>
-                                      <p className="text-sm font-bold text-blue-600">
-                                        {ipo.subscription}
-                                      </p>
-                                    </div>
-                                    <div>
-                                      <p className="text-xs text-gray-500 mb-1">
-                                        Exp. Premium
-                                      </p>
-                                      <p className="text-sm font-bold text-green-600">
-                                        {ipo.expPremium}
-                                      </p>
-                                    </div>
-                                  </div>
-
-                                  {/* Action Buttons */}
-                                  <div className="flex gap-2 flex-shrink-0">
-                                    <button className="px-4 py-2 bg-purple-100 text-purple-700 rounded-lg text-sm font-medium hover:bg-purple-200 transition-colors whitespace-nowrap">
-                                      View
-                                    </button>
-                                    <button className="px-5 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors whitespace-nowrap">
-                                      Apply
-                                    </button>
-                                  </div>
-                                </div>
-                                {/* Disclaimer Section */}
-                                <div className="mt-5 pt-4 border-t border-gray-200 flex items-start gap-2">
-                                  <svg
-                                    className="w-4 h-4 text-yellow-600 flex-shrink-0 mt-0.5"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                  >
-                                    <path
-                                      fillRule="evenodd"
-                                      d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                                      clipRule="evenodd"
-                                    />
-                                  </svg>
-                                  <p className="text-xs text-gray-500 leading-relaxed">
-                                    UPI Mandate for Bids placed between 5 PM and
-                                    before 10 AM will be received after 10 AM.
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
+                      {!isLoading && !error && displayedIpos.length === 0 && (
+                        <div className="border border-gray-200 rounded-lg bg-white p-4 text-sm text-gray-600">
+                          No IPOs found for the selected filter.
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex justify-between items-center">
+                      {/* Results info and limit selector */}
+                      {pagination && (
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-start gap-2 mt-4 mb-2">
+                          <p className="text-sm text-gray-600">
+                            Showing{" "}
+                            <span className="font-medium">
+                              {(pagination.page - 1) * pagination.limit + 1}
+                            </span>{" "}
+                            to{" "}
+                            <span className="font-medium">
+                              {Math.min(
+                                pagination.page * pagination.limit,
+                                pagination.total
+                              )}
+                            </span>{" "}
+                            of{" "}
+                            <span className="font-medium">{pagination.total}</span>{" "}
+                            IPOs
+                          </p>
+                          <div className="flex items-center gap-2">
+                            <Select
+                              value={limit.toString()}
+                              onValueChange={handleLimitChange}
+                            >
+                              <SelectTrigger className="w-20 h-8 bg-white">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent className="bg-white">
+                                <SelectItem value="10">10</SelectItem>
+                                <SelectItem value="20">20</SelectItem>
+                                <SelectItem value="50">50</SelectItem>
+                                <SelectItem value="100">100</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <span className="text-sm text-gray-600">per page</span>
                           </div>
                         </div>
-                      ))}
+                      )}
+                      {/* Pagination */}
+                      {!isLoading &&
+                        !error &&
+                        pagination &&
+                        pagination.totalPages > 1 && (
+                          <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
+                            <Pagination>
+                              <PaginationContent>
+                                {/* Previous Button */}
+                                <PaginationItem>
+                                  <PaginationPrevious
+                                    href="#"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      if (pagination.hasPrevPage) {
+                                        handlePageChange(page - 1);
+                                      }
+                                    }}
+                                    className={
+                                      !pagination.hasPrevPage
+                                        ? "pointer-events-none opacity-50"
+                                        : "cursor-pointer"
+                                    }
+                                  />
+                                </PaginationItem>
+
+                                {/* Page Numbers */}
+                                {getPageNumbers().map((pageNum, index) => (
+                                  <PaginationItem key={index}>
+                                    {pageNum === "ellipsis" ? (
+                                      <PaginationEllipsis />
+                                    ) : (
+                                      <PaginationLink
+                                        href="#"
+                                        isActive={pageNum === page}
+                                        onClick={(e) => {
+                                          e.preventDefault();
+                                          handlePageChange(pageNum);
+                                        }}
+                                        className="cursor-pointer"
+                                      >
+                                        {pageNum}
+                                      </PaginationLink>
+                                    )}
+                                  </PaginationItem>
+                                ))}
+
+                                {/* Next Button */}
+                                <PaginationItem>
+                                  <PaginationNext
+                                    href="#"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      if (pagination.hasNextPage) {
+                                        handlePageChange(page + 1);
+                                      }
+                                    }}
+                                    className={
+                                      !pagination.hasNextPage
+                                        ? "pointer-events-none opacity-50"
+                                        : "cursor-pointer"
+                                    }
+                                  />
+                                </PaginationItem>
+                              </PaginationContent>
+                            </Pagination>
+                          </div>
+                        )}
                     </div>
                   </div>
                   {/* Discover More Section */}

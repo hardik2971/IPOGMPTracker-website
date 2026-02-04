@@ -3,7 +3,7 @@ export default function WelcomeSection() {
     <section className="py-10 sm:py-12 md:py-16 px-4 bg-[#f2f4ff]">
       <div className="container mx-auto max-w-4xl text-left">
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4 sm:mb-6">
-          Welcome to IPO.in
+          Welcome to IPOGMPTracker
         </h2>
         <div className="h-[300px] sm:h-[400px] md:h-[450px] overflow-y-auto bg-white rounded-lg p-3 sm:p-4 border border-gray-300">
           <p className="text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed">
@@ -68,7 +68,7 @@ export default function WelcomeSection() {
             <br></br>
             Invest with a View With IPOGMPTracker, get ready for an exciting
             investment journey. Be informed, stay ahead, and apply effortlessly
-            in the most lucrative IPOs with IPOGMPTracker. Let's invest in the
+            in the most lucrative IPOs with IPOGMPTracker. Lets invest in the
             future together!
           </p>
         </div>

@@ -10,7 +10,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "IPO.in - Broker Details & Comparison",
+  title: "IPOGMPTracker - Broker Details & Comparison",
   description:
     "Your comprehensive platform for IPO information, broker comparison, and investment services",
 };

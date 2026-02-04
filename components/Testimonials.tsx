@@ -14,7 +14,7 @@ export default function Testimonials() {
 
               {/* Testimonial Text */}
               <blockquote className="text-sm md:text-lg text-blue-900 leading-relaxed text-center mb-6">
-                "When I was new to the world of IPOs, IPO.in helped me understand everything about IPOs from the basics to how they actually operate. It's a fantastic platform and I would highly recommend it to all IPO investors. 💯💯💯"
+                When I was new to the world of IPOs, IPOGMPTracker helped me understand everything about IPOs from the basics to how they actually operate. It is a fantastic platform and I would highly recommend it to all IPO investors. 💯💯💯
               </blockquote>
 
               {/* Star Rating - 4 Orange Stars */}

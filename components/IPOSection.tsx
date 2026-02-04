@@ -31,7 +31,6 @@ export default function IPOSection() {
   const [displayedIpos, setDisplayedIpos] = useState<DisplayIpo[]>([]);
   const [limit, setLimit] = useState<number>(20);
   const [page, setPage] = useState<number>(1);
-
   const [ipos, setIpos] = useState<Ipo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -148,18 +147,16 @@ export default function IPOSection() {
                   {/* Current IPOs */}
                   <button
                     onClick={() => setActiveTab("current")}
-                    className={`cursor-pointer mt-3 sm:mt-5 w-full flex flex-col items-center justify-center px-3 sm:px-4 py-4 sm:py-6 bg-white rounded-lg font-medium transition-colors text-sm sm:text-base ${
-                      activeTab === "current"
-                        ? "border-2 border-purple-600"
-                        : "border-2 border-gray-100 text-gray-600 hover:bg-gray-50"
-                    }`}
+                    className={`cursor-pointer mt-3 sm:mt-5 w-full flex flex-col items-center justify-center px-3 sm:px-4 py-4 sm:py-6 bg-white rounded-lg font-medium transition-colors text-sm sm:text-base ${activeTab === "current"
+                      ? "border-2 border-purple-600"
+                      : "border-2 border-gray-100 text-gray-600 hover:bg-gray-50"
+                      }`}
                   >
                     <svg
-                      className={`w-6 h-6 mb-2 ${
-                        activeTab === "current"
-                          ? "text-purple-600"
-                          : "text-gray-600"
-                      }`}
+                      className={`w-6 h-6 mb-2 ${activeTab === "current"
+                        ? "text-purple-600"
+                        : "text-gray-600"
+                        }`}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -172,11 +169,10 @@ export default function IPOSection() {
                       />
                     </svg>
                     <span
-                      className={`text-center leading-tight ${
-                        activeTab === "current"
-                          ? "text-purple-600"
-                          : "text-gray-600"
-                      }`}
+                      className={`text-center leading-tight ${activeTab === "current"
+                        ? "text-purple-600"
+                        : "text-gray-600"
+                        }`}
                     >
                       <span className="block">Current</span>
                       <span className="block">IPOs</span>
@@ -185,18 +181,16 @@ export default function IPOSection() {
                   {/* Upcoming IPOs */}
                   <button
                     onClick={() => setActiveTab("upcoming")}
-                    className={`cursor-pointer w-full flex flex-col items-center justify-center px-3 sm:px-4 py-4 sm:py-6 bg-white rounded-lg font-medium transition-colors text-sm sm:text-base ${
-                      activeTab === "upcoming"
-                        ? "border-2 border-purple-600"
-                        : "border-2 border-gray-100 text-gray-600 hover:bg-gray-50"
-                    }`}
+                    className={`cursor-pointer w-full flex flex-col items-center justify-center px-3 sm:px-4 py-4 sm:py-6 bg-white rounded-lg font-medium transition-colors text-sm sm:text-base ${activeTab === "upcoming"
+                      ? "border-2 border-purple-600"
+                      : "border-2 border-gray-100 text-gray-600 hover:bg-gray-50"
+                      }`}
                   >
                     <svg
-                      className={`w-5 h-5 sm:w-6 sm:h-6 mb-2 ${
-                        activeTab === "upcoming"
-                          ? "text-purple-600"
-                          : "text-gray-600"
-                      }`}
+                      className={`w-5 h-5 sm:w-6 sm:h-6 mb-2 ${activeTab === "upcoming"
+                        ? "text-purple-600"
+                        : "text-gray-600"
+                        }`}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -209,11 +203,10 @@ export default function IPOSection() {
                       />
                     </svg>
                     <span
-                      className={`text-center leading-tight ${
-                        activeTab === "upcoming"
-                          ? "text-purple-600"
-                          : "text-gray-600"
-                      }`}
+                      className={`text-center leading-tight ${activeTab === "upcoming"
+                        ? "text-purple-600"
+                        : "text-gray-600"
+                        }`}
                     >
                       <span className="block">Upcoming</span>
                       <span className="block">IPOs</span>
@@ -222,18 +215,16 @@ export default function IPOSection() {
                   {/* Listed IPOs */}
                   <button
                     onClick={() => setActiveTab("listed")}
-                    className={`cursor-pointer w-full flex flex-col items-center justify-center px-3 sm:px-4 py-4 sm:py-6 bg-white rounded-lg font-medium transition-colors text-sm sm:text-base ${
-                      activeTab === "listed"
-                        ? "border-2 border-purple-600"
-                        : "border-2 border-gray-100 text-gray-600 hover:bg-gray-50"
-                    }`}
+                    className={`cursor-pointer w-full flex flex-col items-center justify-center px-3 sm:px-4 py-4 sm:py-6 bg-white rounded-lg font-medium transition-colors text-sm sm:text-base ${activeTab === "listed"
+                      ? "border-2 border-purple-600"
+                      : "border-2 border-gray-100 text-gray-600 hover:bg-gray-50"
+                      }`}
                   >
                     <svg
-                      className={`w-6 h-6 mb-2 ${
-                        activeTab === "listed"
-                          ? "text-purple-600"
-                          : "text-gray-600"
-                      }`}
+                      className={`w-6 h-6 mb-2 ${activeTab === "listed"
+                        ? "text-purple-600"
+                        : "text-gray-600"
+                        }`}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -246,11 +237,10 @@ export default function IPOSection() {
                       />
                     </svg>
                     <span
-                      className={`text-center leading-tight ${
-                        activeTab === "listed"
-                          ? "text-purple-600"
-                          : "text-gray-600"
-                      }`}
+                      className={`text-center leading-tight ${activeTab === "listed"
+                        ? "text-purple-600"
+                        : "text-gray-600"
+                        }`}
                     >
                       <span className="block">Listed</span>
                       <span className="block">IPOs</span>
@@ -347,47 +337,6 @@ export default function IPOSection() {
                       </div>
                     </div>
                   </div>
-
-                  {/* Results info and limit selector */}
-                  {pagination && (
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mt-4 mb-2">
-                      <p className="text-sm text-gray-600">
-                        Showing{" "}
-                        <span className="font-medium">
-                          {(pagination.page - 1) * pagination.limit + 1}
-                        </span>{" "}
-                        to{" "}
-                        <span className="font-medium">
-                          {Math.min(
-                            pagination.page * pagination.limit,
-                            pagination.total
-                          )}
-                        </span>{" "}
-                        of{" "}
-                        <span className="font-medium">{pagination.total}</span>{" "}
-                        IPOs
-                      </p>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm text-gray-600">Show:</span>
-                        <Select
-                          value={limit.toString()}
-                          onValueChange={handleLimitChange}
-                        >
-                          <SelectTrigger className="w-20 h-8 bg-white">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent className="bg-white">
-                            <SelectItem value="10">10</SelectItem>
-                            <SelectItem value="20">20</SelectItem>
-                            <SelectItem value="50">50</SelectItem>
-                            <SelectItem value="100">100</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <span className="text-sm text-gray-600">per page</span>
-                      </div>
-                    </div>
-                  )}
-
                   <div className="grid gap-2 sm:gap-3 mt-2">
                     {isLoading && (
                       <div className="border border-gray-200 rounded-lg bg-white p-4 text-sm text-gray-600">
@@ -413,75 +362,114 @@ export default function IPOSection() {
                       </div>
                     )}
                   </div>
-
-                  {/* Pagination */}
-                  {!isLoading &&
-                    !error &&
-                    pagination &&
-                    pagination.totalPages > 1 && (
-                      <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <Pagination>
-                          <PaginationContent>
-                            {/* Previous Button */}
-                            <PaginationItem>
-                              <PaginationPrevious
-                                href="#"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  if (pagination.hasPrevPage) {
-                                    handlePageChange(page - 1);
-                                  }
-                                }}
-                                className={
-                                  !pagination.hasPrevPage
-                                    ? "pointer-events-none opacity-50"
-                                    : "cursor-pointer"
-                                }
-                              />
-                            </PaginationItem>
-
-                            {/* Page Numbers */}
-                            {getPageNumbers().map((pageNum, index) => (
-                              <PaginationItem key={index}>
-                                {pageNum === "ellipsis" ? (
-                                  <PaginationEllipsis />
-                                ) : (
-                                  <PaginationLink
-                                    href="#"
-                                    isActive={pageNum === page}
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                      handlePageChange(pageNum);
-                                    }}
-                                    className="cursor-pointer"
-                                  >
-                                    {pageNum}
-                                  </PaginationLink>
-                                )}
-                              </PaginationItem>
-                            ))}
-
-                            {/* Next Button */}
-                            <PaginationItem>
-                              <PaginationNext
-                                href="#"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  if (pagination.hasNextPage) {
-                                    handlePageChange(page + 1);
-                                  }
-                                }}
-                                className={
-                                  !pagination.hasNextPage
-                                    ? "pointer-events-none opacity-50"
-                                    : "cursor-pointer"
-                                }
-                              />
-                            </PaginationItem>
-                          </PaginationContent>
-                        </Pagination>
+                  <div className="flex justify-between items-center">
+                    {/* Results info and limit selector */}
+                    {pagination && (
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-start gap-2 mt-4 mb-2">
+                        <p className="text-sm text-gray-600">
+                          Showing{" "}
+                          <span className="font-medium">
+                            {(pagination.page - 1) * pagination.limit + 1}
+                          </span>{" "}
+                          to{" "}
+                          <span className="font-medium">
+                            {Math.min(
+                              pagination.page * pagination.limit,
+                              pagination.total
+                            )}
+                          </span>{" "}
+                          of{" "}
+                          <span className="font-medium">{pagination.total}</span>{" "}
+                          IPOs
+                        </p>
+                        <div className="flex items-center gap-2">
+                          <Select
+                            value={limit.toString()}
+                            onValueChange={handleLimitChange}
+                          >
+                            <SelectTrigger className="w-20 h-8 bg-white">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent className="bg-white">
+                              <SelectItem value="10">10</SelectItem>
+                              <SelectItem value="20">20</SelectItem>
+                              <SelectItem value="50">50</SelectItem>
+                              <SelectItem value="100">100</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <span className="text-sm text-gray-600">per page</span>
+                        </div>
                       </div>
                     )}
+                    {/* Pagination */}
+                    {!isLoading &&
+                      !error &&
+                      pagination &&
+                      pagination.totalPages > 1 && (
+                        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
+                          <Pagination>
+                            <PaginationContent>
+                              {/* Previous Button */}
+                              <PaginationItem>
+                                <PaginationPrevious
+                                  href="#"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    if (pagination.hasPrevPage) {
+                                      handlePageChange(page - 1);
+                                    }
+                                  }}
+                                  className={
+                                    !pagination.hasPrevPage
+                                      ? "pointer-events-none opacity-50"
+                                      : "cursor-pointer"
+                                  }
+                                />
+                              </PaginationItem>
+
+                              {/* Page Numbers */}
+                              {getPageNumbers().map((pageNum, index) => (
+                                <PaginationItem key={index}>
+                                  {pageNum === "ellipsis" ? (
+                                    <PaginationEllipsis />
+                                  ) : (
+                                    <PaginationLink
+                                      href="#"
+                                      isActive={pageNum === page}
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        handlePageChange(pageNum);
+                                      }}
+                                      className="cursor-pointer"
+                                    >
+                                      {pageNum}
+                                    </PaginationLink>
+                                  )}
+                                </PaginationItem>
+                              ))}
+
+                              {/* Next Button */}
+                              <PaginationItem>
+                                <PaginationNext
+                                  href="#"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    if (pagination.hasNextPage) {
+                                      handlePageChange(page + 1);
+                                    }
+                                  }}
+                                  className={
+                                    !pagination.hasNextPage
+                                      ? "pointer-events-none opacity-50"
+                                      : "cursor-pointer"
+                                  }
+                                />
+                              </PaginationItem>
+                            </PaginationContent>
+                          </Pagination>
+                        </div>
+                      )}
+                  </div>
                 </div>
 
                 {/* Discover More Section */}

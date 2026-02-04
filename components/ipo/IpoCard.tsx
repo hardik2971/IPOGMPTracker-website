@@ -35,7 +35,13 @@ export default function IpoCard({ ipo }: IpoCardProps) {
               <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-800 leading-tight">
                 {ipo.name}
               </h3>
-              <span className="px-3 py-0.5 bg-green-600 text-white text-xs font-medium rounded">
+              <span
+                className={`px-3 py-0.5 text-xs font-medium rounded ${
+                  ipo.ipoType?.toLowerCase() === "sme"
+                    ? "bg-[#f1f4ff] text-[#480088]"
+                    : "bg-[#5e783d] text-[#ffffff]"
+                }`}
+              >
                 {ipo.ipoType}
               </span>
               {ipo.currentStatus === "closed" ? (
